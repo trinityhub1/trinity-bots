@@ -146,7 +146,7 @@ const paymentSteps = [
   ['Delivery and hosting', 'The bot is launched, hosting is activated, and renewals keep the bot online.'],
 ];
 
-const quoteEndpoint = import.meta.env.VITE_QUOTE_ENDPOINT;
+const quoteEndpoint = import.meta.env.VITE_QUOTE_ENDPOINT || 'https://trinity-bots-quotes.trinitybots.workers.dev';
 const cloudflareAnalyticsToken = import.meta.env.VITE_CLOUDFLARE_ANALYTICS_TOKEN;
 
 const initialQuoteDraft = {
