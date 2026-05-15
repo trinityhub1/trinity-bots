@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Trinity Bots</title>
     <script>
-      sessionStorage.redirect = location.pathname + location.search + location.hash;
-      location.replace('/');
+      var isProjectPage = location.hostname.indexOf('github.io') !== -1;
+      var firstPath = location.pathname.split('/').filter(Boolean)[0] || '';
+      var base = isProjectPage && firstPath ? '/' + firstPath : '';
+      var route = location.pathname.slice(base.length) || '/';
+      location.replace(base + '/#' + route + location.search + location.hash);
     </script>
   </head>
   <body></body>

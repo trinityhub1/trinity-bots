@@ -1247,15 +1247,30 @@ h3 {
 @media (max-width: 900px) {
   .nav {
     grid-template-columns: 1fr auto;
+    gap: 0.65rem;
   }
 
   .nav-links {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+    gap: 1rem;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 0.15rem;
+    scrollbar-width: none;
+  }
+
+  .nav-links::-webkit-scrollbar {
     display: none;
+  }
+
+  .nav-links a {
+    flex: 0 0 auto;
   }
 
   .hero {
     min-height: 88vh;
-    padding-top: 7rem;
+    padding-top: 9.2rem;
   }
 
   .hero-overlay {
@@ -1323,7 +1338,7 @@ h3 {
 
   .hero {
     min-height: 94vh;
-    padding: 6.4rem 1rem 2.5rem;
+    padding: 9.2rem 1rem 2.5rem;
   }
 
   h1 {

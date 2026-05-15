@@ -181,15 +181,15 @@ function TermsPage() {
   return (
     <main>
       <nav className="nav static-nav">
-        <a href="/" className="brand" aria-label="Trinity Bots home">
+        <a href="./" className="brand" aria-label="Trinity Bots home">
           <span className="brand-mark image-mark"><img src="./trinity-bots-logo.png" alt="" /></span>
           <span>Trinity Bots</span>
         </a>
         <div className="nav-links" aria-label="Page navigation">
-          <a href="/">Home</a>
-          <a href="/privacy">Privacy</a>
+          <a href="./">Home</a>
+          <a href="#/privacy">Privacy</a>
         </div>
-        <a className="nav-cta" href="/#quote">Quote</a>
+        <a className="nav-cta" href="./#quote">Quote</a>
       </nav>
       <section className="legal-page">
         <p className="section-kicker">Terms</p>
@@ -208,7 +208,7 @@ function TermsPage() {
             </article>
           ))}
         </div>
-        <a className="button primary legal-cta" href="/#quote">Request a quote</a>
+        <a className="button primary legal-cta" href="./#quote">Request a quote</a>
       </section>
     </main>
   );
@@ -227,15 +227,15 @@ function PrivacyPage() {
   return (
     <main>
       <nav className="nav static-nav">
-        <a href="/" className="brand" aria-label="Trinity Bots home">
+        <a href="./" className="brand" aria-label="Trinity Bots home">
           <span className="brand-mark image-mark"><img src="./trinity-bots-logo.png" alt="" /></span>
           <span>Trinity Bots</span>
         </a>
         <div className="nav-links" aria-label="Page navigation">
-          <a href="/">Home</a>
-          <a href="/terms">Terms</a>
+          <a href="./">Home</a>
+          <a href="#/terms">Terms</a>
         </div>
-        <a className="nav-cta" href="/#quote">Quote</a>
+        <a className="nav-cta" href="./#quote">Quote</a>
       </nav>
       <section className="legal-page">
         <p className="section-kicker">Privacy</p>
@@ -252,7 +252,7 @@ function PrivacyPage() {
             </article>
           ))}
         </div>
-        <a className="button primary legal-cta" href="/#quote">Request a quote</a>
+        <a className="button primary legal-cta" href="./#quote">Request a quote</a>
       </section>
     </main>
   );
@@ -338,16 +338,16 @@ function ReviewsPage() {
   return (
     <main>
       <nav className="nav static-nav">
-        <a href="/" className="brand" aria-label="Trinity Bots home">
+        <a href="./" className="brand" aria-label="Trinity Bots home">
           <span className="brand-mark image-mark"><img src="./trinity-bots-logo.png" alt="" /></span>
           <span>Trinity Bots</span>
         </a>
         <div className="nav-links" aria-label="Page navigation">
-          <a href="/">Home</a>
-          <a href="/terms">Terms</a>
-          <a href="/privacy">Privacy</a>
+          <a href="./">Home</a>
+          <a href="#/terms">Terms</a>
+          <a href="#/privacy">Privacy</a>
         </div>
-        <a className="nav-cta" href="/#quote">Quote</a>
+        <a className="nav-cta" href="./#quote">Quote</a>
       </nav>
 
       <section className="review-page">
@@ -536,7 +536,7 @@ function App() {
           <a href="#bots">Bots</a>
           <a href="#process">Process</a>
           <a href="#pricing">Pricing</a>
-          <a href="/reviews">Reviews</a>
+          <a href="#/reviews">Reviews</a>
           <a href="#quote">Quote</a>
         </div>
         <a className="nav-cta" href="#contact">Start</a>
@@ -564,6 +564,9 @@ function App() {
             </a>
             <a className="button secondary" href="#pricing">
               View hosting
+            </a>
+            <a className="button secondary" href="#/reviews">
+              Leave a review
             </a>
           </div>
           <div className="signal-strip" aria-label="Service highlights">
@@ -932,7 +935,7 @@ function App() {
           </div>
           <label className="terms-check full">
             <input type="checkbox" name="termsAccepted" checked={quoteDraft.termsAccepted} onChange={handleQuoteChange} required />
-            <span>I understand builds are custom quoted, hosting must be renewed to stay online, and I have read the <a href="/terms">Terms</a>.</span>
+            <span>I understand builds are custom quoted, hosting must be renewed to stay online, and I have read the <a href="#/terms">Terms</a>.</span>
           </label>
           <button className="button primary full" type="submit" disabled={formStatus.type === 'loading'}>
             {formStatus.type === 'loading' ? 'Sending...' : 'Send quote request'} <Rocket size={18} />
@@ -972,9 +975,9 @@ function App() {
           <a href="#bots">Bots</a>
           <a href="#pricing">Pricing</a>
           <a href="#quote">Quote</a>
-          <a href="/reviews">Reviews</a>
-          <a href="/terms">Terms</a>
-          <a href="/privacy">Privacy</a>
+          <a href="#/reviews">Reviews</a>
+          <a href="#/terms">Terms</a>
+          <a href="#/privacy">Privacy</a>
         </div>
         <p className="footer-note">Quotes are reviewed manually by Zrasy. Hosting remains offline until renewed if a hosting period expires.</p>
         <p className="copyright">© {new Date().getFullYear()} Trinity Bots. All rights reserved.</p>
@@ -989,7 +992,29 @@ if (redirect) {
   window.history.replaceState(null, '', redirect);
 }
 
-const path = window.location.pathname.replace(/\/$/, '');
-const Root = path === '/terms' ? TermsPage : path === '/privacy' ? PrivacyPage : path === '/reviews' ? ReviewsPage : App;
+function getCurrentRoute() {
+  const hashRoute = window.location.hash.startsWith('#/') ? window.location.hash.slice(1).replace(/\/$/, '') : '';
+  const pathRoute = window.location.pathname.replace(/^\/trinity-bots/, '').replace(/\/$/, '');
+  return hashRoute || pathRoute;
+}
 
-createRoot(document.getElementById('root')).render(<Root />);
+function Router() {
+  const [route, setRoute] = useState(getCurrentRoute);
+
+  useEffect(() => {
+    const updateRoute = () => setRoute(getCurrentRoute());
+    window.addEventListener('hashchange', updateRoute);
+    window.addEventListener('popstate', updateRoute);
+    return () => {
+      window.removeEventListener('hashchange', updateRoute);
+      window.removeEventListener('popstate', updateRoute);
+    };
+  }, []);
+
+  if (route === '/terms') return <TermsPage />;
+  if (route === '/privacy') return <PrivacyPage />;
+  if (route === '/reviews') return <ReviewsPage />;
+  return <App />;
+}
+
+createRoot(document.getElementById('root')).render(<Router />);
