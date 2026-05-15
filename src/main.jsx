@@ -283,6 +283,7 @@ function ReviewsPage() {
 
   async function handleReviewSubmit(event) {
     event.preventDefault();
+    const form = event.currentTarget;
 
     if (!quoteEndpoint) {
       setReviewStatus({
@@ -292,7 +293,7 @@ function ReviewsPage() {
       return;
     }
 
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(form);
     const reviewRequest = {
       ...Object.fromEntries(formData.entries()),
       submissionType: 'review',
@@ -320,7 +321,7 @@ function ReviewsPage() {
 
       const result = await response.json().catch(() => ({}));
       const reference = result.reference ? ` Reference: ${result.reference}.` : '';
-      event.currentTarget.reset();
+      form.reset();
       setReviewDraft(initialReviewDraft);
       setReviewStartedAt(Date.now());
       setReviewStatus({
@@ -466,6 +467,7 @@ function App() {
 
   async function handleQuoteSubmit(event) {
     event.preventDefault();
+    const form = event.currentTarget;
 
     if (!quoteEndpoint) {
       setFormStatus({
@@ -475,7 +477,7 @@ function App() {
       return;
     }
 
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(form);
     const quoteRequest = Object.fromEntries(formData.entries());
 
     setFormStatus({ type: 'loading', message: 'Sending quote request...' });
@@ -499,7 +501,7 @@ function App() {
         throw new Error(errorMessage);
       }
 
-      event.currentTarget.reset();
+      form.reset();
       setFormStartedAt(Date.now());
       setQuoteDraft(initialQuoteDraft);
       const result = await response.json().catch(() => ({}));
