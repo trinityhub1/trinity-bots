@@ -1,0 +1,6 @@
+name = "trinity-bots-quotes"
+main = "quote-worker.js"
+compatibility_date = "2026-04-29"
+
+[vars]
+ALLOWED_ORIGIN = "*"
